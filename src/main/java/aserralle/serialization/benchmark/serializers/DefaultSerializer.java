@@ -11,6 +11,11 @@ import aserralle.serialization.benchmark.Serializer;
 
 public class DefaultSerializer implements Serializer {
 
+	private OutputStream nullOutputStream = new OutputStream() {
+		@Override
+		public void write(int b) throws IOException {}
+	};
+
 	@Override
 	public void deserialize(byte[] array) {
 		try {
@@ -26,13 +31,7 @@ public class DefaultSerializer implements Serializer {
 	@Override
 	public void serialize(Object obj) {
 		try {
-			ObjectOutputStream out = new ObjectOutputStream(new OutputStream() {
-				@Override
-				public void write(int b) throws IOException {}
-			});
-			out.writeObject(obj);
-			out.flush();
-			out.close();
+			serialize(obj, nullOutputStream);
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
@@ -40,18 +39,22 @@ public class DefaultSerializer implements Serializer {
 	}
 
 	@Override
-	public byte[] objectToByteArray(Object obj) {
+	public byte[] serializeToByteArray(Object obj) {
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ObjectOutputStream oos = new ObjectOutputStream(baos);
-			oos.writeObject(obj);
-			oos.flush();
-			oos.close();
+			serialize(obj, baos);
 			return baos.toByteArray();
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
+	}
+
+	private void serialize(Object obj, OutputStream outputStream) throws IOException {
+		ObjectOutputStream out = new ObjectOutputStream(outputStream);
+		out.writeObject(obj);
+		out.flush();
+		out.close();
 	}
 
 	@Override

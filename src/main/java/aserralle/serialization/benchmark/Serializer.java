@@ -7,5 +7,5 @@ public interface Serializer extends IdentifiedObject {
 
 	void serialize(Object obj);
 
-	byte[] objectToByteArray(Object obj);
+	byte[] serializeToByteArray(Object obj);
 }

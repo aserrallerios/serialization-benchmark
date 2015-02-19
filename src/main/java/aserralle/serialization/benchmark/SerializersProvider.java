@@ -7,8 +7,9 @@ import aserralle.serialization.benchmark.serializers.DefaultSerializer;
 
 public class SerializersProvider implements Iterable<Serializer> {
 
-	final static Iterable<Serializer> serializers = Arrays
-			.asList(new Serializer[] { new DefaultSerializer() });
+	final static Iterable<Serializer> serializers = Arrays.asList(new Serializer[] { //
+			new DefaultSerializer() //
+			});
 
 	@Override
 	public Iterator<Serializer> iterator() {
